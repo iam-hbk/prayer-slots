@@ -11,10 +11,13 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, InfoIcon, Search } from "lucide-react";
+import { AlertCircle, Download, InfoIcon, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 type Person = {
   name: string;
@@ -77,6 +80,26 @@ export default function Home() {
           person.surname.toLowerCase().includes(searchTerm.toLowerCase())
       )
   );
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Prayer Slots", 14, 15);
+
+    const tableData = filteredTimeSlots.map((slot) => [
+      slot.time,
+      slot.people
+        .map((person) => `${person.name} ${person.surname} (${person.phone})`)
+        .join("\n") || "-",
+      slot.people.length === 0 ? "-" : `Filled (${slot.people.length})`,
+    ]);
+
+    autoTable(doc, {
+      head: [["Time", "People", "Status"]],
+      body: tableData,
+      startY: 20,
+    });
+
+    doc.save("prayer_slots.pdf");
+  };
 
   if (isLoading) {
     return (
@@ -120,8 +143,11 @@ export default function Home() {
       </Card>
 
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Prayer Slots</CardTitle>
+          <Button onClick={downloadPDF} className="ml-4">
+            <Download className="mr-2 h-4 w-4" /> Download PDF
+          </Button>
         </CardHeader>
         <CardContent>
           <div className="mb-4">
