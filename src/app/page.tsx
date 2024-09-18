@@ -305,7 +305,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <ScrollArea className="h-[600px]">
+          <ScrollArea className="h-[600px] px-2">
             <Table>
               <TableHeader>
                 <TableRow>
