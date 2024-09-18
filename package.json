@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next-sitemap",
     "start": "next start",
     "lint": "next lint",
-    "generate-sitemap": "node generate-sitemap.js"
+    "sitemap": "next-sitemap"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.1",

@@ -1,1 +1,9 @@
-Sitemap: https://prayer-spots.techbk.dev/sitemap.xml
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://prayer-slots.techbk.dev
+
+# Sitemaps
+Sitemap: https://prayer-slots.techbk.dev/sitemap.xml
