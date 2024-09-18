@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { AlertCircle, ChevronDown, ChevronUp, InfoIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -101,7 +101,23 @@ export default function Home() {
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 px-4">
+      <Card className="mb-6">
+        <CardContent className="pt-6">
+          <Alert>
+            <InfoIcon className="h-4 w-4" />
+            <AlertTitle className="font-bold">Slot Assignment Notice</AlertTitle>
+            <AlertDescription>
+              The priority is to keep the prayer chain unbroken by filling empty
+              slots first. If you're not assigned to one of your preferred
+              times, it means those slots were already filled, and we needed to
+              ensure that all open slots were covered. Your flexibility helps us
+              maintain continuous prayer throughout the day.
+            </AlertDescription>
+          </Alert>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>Prayer Slots</CardTitle>
