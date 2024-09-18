@@ -172,20 +172,12 @@ export default function Home() {
                         Empty
                       </Badge>
                     )}
-                    {slot.people.length === 1 && (
-                      <Badge
-                        variant="outline"
-                        className="bg-yellow-100 text-yellow-800"
-                      >
-                        Partially Filled
-                      </Badge>
-                    )}
-                    {slot.people.length >= 2 && (
+                    {slot.people.length >= 1 && (
                       <Badge
                         variant="outline"
                         className="bg-green-100 text-green-800"
                       >
-                        Filled
+                        Filled ({slot.people.length})
                       </Badge>
                     )}
                   </TableCell>
