@@ -63,17 +63,19 @@ export default function Home() {
 
   useEffect(() => {
     fetchData();
-    const intervalId = setInterval(fetchData, 60000); // Fetch every minute
+    const intervalId = setInterval(fetchData, 300000); // Fetch every 5 minutes
 
     return () => clearInterval(intervalId); // Clean up on unmount
   }, []);
 
-  const filteredTimeSlots = timeSlots.filter((slot) =>
-    slot.people.some(
-      (person) =>
-        person.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        person.surname.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+  const filteredTimeSlots = timeSlots.filter(
+    (slot) =>
+      searchTerm === "" ||
+      slot.people.some(
+        (person) =>
+          person.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          person.surname.toLowerCase().includes(searchTerm.toLowerCase())
+      )
   );
 
   if (isLoading) {
@@ -110,7 +112,8 @@ export default function Home() {
               slots first. If you're not assigned to one of your preferred
               times, it means those slots were already filled, and we needed to
               ensure that all open slots were covered. Your flexibility helps us
-              maintain continuous prayer throughout the day.
+              maintain continuous prayer throughout the day. Empty slots are
+              still visible for those who haven't been assigned yet.
             </AlertDescription>
           </Alert>
         </CardContent>
@@ -161,19 +164,18 @@ export default function Home() {
                           ))}
                         </div>
                       ) : (
-                        <span className="text-gray-400">Empty</span>
+                        <span className="text-gray-400">Available</span>
                       )}
                     </TableCell>
                     <TableCell>
-                      {slot.people.length === 0 && (
+                      {slot.people.length === 0 ? (
                         <Badge
                           variant="outline"
-                          className="bg-red-100 text-red-800"
+                          className="bg-yellow-100 text-yellow-800"
                         >
                           Empty
                         </Badge>
-                      )}
-                      {slot.people.length >= 1 && (
+                      ) : (
                         <Badge
                           variant="outline"
                           className="bg-green-100 text-green-800"
