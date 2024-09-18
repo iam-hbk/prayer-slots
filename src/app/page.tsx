@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, ChevronDown, ChevronUp, InfoIcon } from "lucide-react";
+import { AlertCircle, InfoIcon, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 type Person = {
@@ -31,7 +31,7 @@ export default function Home() {
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedSlots, setExpandedSlots] = useState<Set<string>>(new Set());
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchData = async () => {
     try {
@@ -68,17 +68,13 @@ export default function Home() {
     return () => clearInterval(intervalId); // Clean up on unmount
   }, []);
 
-  const toggleExpand = (time: string) => {
-    setExpandedSlots((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(time)) {
-        newSet.delete(time);
-      } else {
-        newSet.add(time);
-      }
-      return newSet;
-    });
-  };
+  const filteredTimeSlots = timeSlots.filter((slot) =>
+    slot.people.some(
+      (person) =>
+        person.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        person.surname.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
 
   if (isLoading) {
     return (
@@ -106,7 +102,9 @@ export default function Home() {
         <CardContent className="pt-6">
           <Alert>
             <InfoIcon className="h-4 w-4" />
-            <AlertTitle className="font-bold">Slot Assignment Notice</AlertTitle>
+            <AlertTitle className="font-bold">
+              Slot Assignment Notice
+            </AlertTitle>
             <AlertDescription>
               The priority is to keep the prayer chain unbroken by filling empty
               slots first. If you're not assigned to one of your preferred
@@ -123,83 +121,72 @@ export default function Home() {
           <CardTitle>Prayer Slots</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Time</TableHead>
-                <TableHead>People</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {timeSlots.map((slot) => (
-                <TableRow key={slot.time}>
-                  <TableCell>{slot.time}</TableCell>
-                  <TableCell>
-                    {slot.people.length > 0 ? (
-                      <div>
-                        <div>{`${slot.people[0].name} ${slot.people[0].surname}`}</div>
-                        <div className="text-sm text-gray-500">
-                          {slot.people[0].phone}
-                        </div>
-                        {slot.people.length > 1 &&
-                          !expandedSlots.has(slot.time) && (
-                            <div className="text-sm text-gray-500 mt-1">
-                              +{slot.people.length - 1} more
-                            </div>
-                          )}
-                        {expandedSlots.has(slot.time) &&
-                          slot.people.slice(1).map((person, index) => (
-                            <div key={index} className="mt-2">
+          <div className="mb-4">
+            <div className="relative">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by name"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8"
+              />
+            </div>
+          </div>
+          <ScrollArea className="h-[600px]">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Time</TableHead>
+                  <TableHead>People</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredTimeSlots.map((slot) => (
+                  <TableRow key={slot.time}>
+                    <TableCell>{slot.time}</TableCell>
+                    <TableCell>
+                      {slot.people.length > 0 ? (
+                        <div>
+                          {slot.people.map((person, index) => (
+                            <div
+                              key={index}
+                              className={index > 0 ? "mt-2" : ""}
+                            >
                               <div>{`${person.name} ${person.surname}`}</div>
                               <div className="text-sm text-gray-500">
                                 {person.phone}
                               </div>
                             </div>
                           ))}
-                      </div>
-                    ) : (
-                      <span className="text-gray-400">Empty</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {slot.people.length === 0 && (
-                      <Badge
-                        variant="outline"
-                        className="bg-red-100 text-red-800"
-                      >
-                        Empty
-                      </Badge>
-                    )}
-                    {slot.people.length >= 1 && (
-                      <Badge
-                        variant="outline"
-                        className="bg-green-100 text-green-800"
-                      >
-                        Filled ({slot.people.length})
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {slot.people.length > 1 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleExpand(slot.time)}
-                      >
-                        {expandedSlots.has(slot.time) ? (
-                          <ChevronUp className="h-4 w-4" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4" />
-                        )}
-                      </Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">Empty</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {slot.people.length === 0 && (
+                        <Badge
+                          variant="outline"
+                          className="bg-red-100 text-red-800"
+                        >
+                          Empty
+                        </Badge>
+                      )}
+                      {slot.people.length >= 1 && (
+                        <Badge
+                          variant="outline"
+                          className="bg-green-100 text-green-800"
+                        >
+                          Filled ({slot.people.length})
+                        </Badge>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </ScrollArea>
         </CardContent>
       </Card>
     </div>
