@@ -184,11 +184,11 @@ export default function Home() {
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline">
-                  <LineChartIcon className="mr-2 h-4 w-4" />
-                  View Status
+                  <LineChartIcon className="md:mr-2 h-4 w-4" />
+                  <span className="hidden md:inline-block">View Status</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px] bg-secondary text-secondary-foreground">
+              <DialogContent className="sm:max-w-[425px] bg-secondary text-secondary-foreground rounded-md">
                 <DialogHeader>
                   <DialogTitle>Prayer Slot Status</DialogTitle>
                   <DialogDescription>
@@ -288,7 +288,8 @@ export default function Home() {
               </DialogContent>
             </Dialog>
             <Button onClick={downloadPDF}>
-              <Download className="mr-2 h-4 w-4" /> Download PDF
+              <Download className="md:mr-2 h-4 w-4" />
+              <span className="hidden md:inline-block">Download PDF</span>
             </Button>
           </div>
         </CardHeader>
