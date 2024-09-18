@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: "Prayer Slots",
     images: [
       {
-        url: "https://prayer-slots.techbk.dev/og-image.jpg",
+        url: "https://prayer-slots.techbk.dev/og-image.png",
         width: 1200,
         height: 630,
         alt: "Prayer Slots",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Prayer Slots",
     description: "View prayer slots for the IFCM Video Department",
-    images: ["https://prayer-slots.techbk.dev/og-image.jpg"],
+    images: ["https://prayer-slots.techbk.dev/og-image.png"],
   },
 };
 
